@@ -1,0 +1,108 @@
+CREATE TABLE department(
+    DeptNo INT,
+    Dname VARCHAR(20),
+    Loc VARCHAR(20),
+    PRIMARY KEY(DeptNo)
+);
+
+SELECT * FROM employee;
+
+CREATE TABLE employee(
+    EmpNo INT,
+    Ename VARCHAR(20),
+    Sal INT,
+    Hire_Date DATE,
+    Commission INT,
+    DeptNo INT,
+    Mgr INT,
+    PRIMARY KEY(EmpNo),
+    FOREIGN KEY(DeptNo) REFERENCES department(DeptNo)
+);
+
+Assignment Solution:
+
+1)SELECT * FROM employee WHERE DeptNo=10 or DeptNo=30;
+
+2)SELECT department.DeptNo,Dname,Loc  
+FROM department,employee
+WHERE employee.DeptNo=department.DeptNo GROUP BY employee.DeptNo HAVING COUNT(employee.DeptNo)>1;
+
+3)SELECT * FROM employee WHERE Ename LIKE "S%";
+
+4)SELECT * ,FLOOR(DATEDIFF(CURDATE(),Hire_Date)/365) as Experience 
+FROM employee WHERE FLOOR(DATEDIFF(CURDATE(),Hire_Date)/365)>2;
+
+5)SELECT REPLACE(employee.Ename, 'a','#') as Replace_name FROM employee;
+
+6)SELECT a.Ename as emp, b.Ename as mgr FROM employee a, employee b
+WHERE b.EmpNo=a.Mgr;
+
+7)SELECT department.Dname, SUM(employee.Sal) as Total_sal FROM employee,department
+WHERE department.Deptno=employee.DeptNo GROUP BY employee.DeptNo; 
+
+8)SELECT * FROM employee
+LEFT JOIN department ON employee.DeptNo=department.DeptNo;
+
+9)UPDATE employee SET Sal=Sal+(Sal*0.1);
+SELECT * FROM employee;
+
+10)DELETE FROM employee WHERE DeptNo in (SELECT DeptNo FROM department WHERE Loc='Chennai');
+SELECT * FROM employee;
+
+11)SELECT Ename,SUM(Sal+Commission) as gross_salary FROM employee GROUP BY Ename;
+
+12)ALTER TABLE employee MODIFY COLUMN Ename VARCHAR(250);
+
+13)SELECT NOW();
+
+14)CREATE TABLE student(
+    USN INT,
+    f_name VARCHAR(20),
+    l_name VARCHAR(20),
+    address VARCHAR(50),
+    dob DATE,
+    PRIMARY KEY(USN)
+);
+
+15)SELECT COUNT(*) FROM employee WHERE Sal>10000;
+
+16)SELECT MAX(Sal), MIN(Sal), AVG(Sal) FROM employee;
+
+17)SELECT department.Loc,COUNT(department.Loc) as number_employees FROM department,employee
+WHERE department.Deptno=employee.DeptNo GROUP BY employee.DeptNo; 
+
+18)SELECT * FROM employee ORDER BY Ename DESC;
+
+19)CREATE TABLE EMP_BKP as 
+SELECT  EmpNo,Ename,Sal,Hire_Date,Commission,DeptNo,Mgr
+FROM employee;
+
+20)SELECT CONCAT(SUBSTRING(Ename,1,3),Sal) FROM employee;
+
+21)SELECT * FROM employee WHERE Ename LIKE "S%";
+
+22)SELECT * FROM employee
+WHERE employee.DeptNo in (SELECT DeptNo FROM department WHERE department.Loc='Bangalore');
+
+23)SELECT Ename FROM employee WHERE Ename REGEXP '^[A-K].*$';
+
+24)SELECT a.Ename as emp FROM employee a, employee b
+WHERE b.EmpNo=a.Mgr AND b.Ename='Stefen';
+
+25)SELECT E1.Ename AS Manager_Name, COUNT(E2.EmpNo) as No_employees FROM employee E1,employee E2
+WHERE E1.EmpNo = E2.Mgr GROUP BY E1.EmpNo;
+
+26)SELECT * FROM employee e, department d WHERE e.DeptNo=d.DeptNo
+AND Sal = (SELECT MAX(Sal) FROM employee WHERE Sal<(SELECT MAX(Sal) FROM employee));
+
+27)SELECT * FROM employee WHERE EmpNo in (SELECT Mgr from employee);
+
+28)SELECT mgr.EmpNo as Manager_ID, mgr.Ename as Manager_Name, mgr.Hire_Date as Manager_Hire_Date,
+FLOOR(SUM(DATEDIFF(CURDATE(), emp.Hire_Date)/365)) as Total_Experience
+FROM employee mgr,employee emp WHERE emp.Mgr = mgr.EmpNo
+GROUP BY mgr.EmpNo;
+
+29)SELECT * FROM employee,department
+WHERE employee.DeptNo = department.DeptNo AND employee.Commission < 1000 AND department.Loc = 'Delhi';
+
+30)SELECT * FROM employee WHERE Hire_Date<(SELECT Hire_Date FROM employee WHERE Ename='Martin');
